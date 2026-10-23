@@ -66,7 +66,7 @@ def get_obj_key_list(s3):
             if key.endswith(".gz"):
                 obj_keys.append(key)
 
-    obj_keys.sort(reverse=True)
+    obj_keys.sort()
     return obj_keys
 
 
