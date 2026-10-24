@@ -33,15 +33,27 @@ class ProgressReader:
 
 
 def encode_work_data(work):
-    data = {
-        "publication_year": work.get("publication_year"),
-        "topics": [
-            (extract_numeric_id(topic["id"]), topic["score"])
-            for topic in work.get("topics", [])[:3]
-        ],
-    }
+    data = []
+
+    data.append(work.get("publication_year"))
+    data.append(work.get("cited_by_count"))
+    data.append([
+        (extract_numeric_id(topic["id"]), topic["score"])
+        for topic in work.get("topics", [])[:3]
+    ])
+    data.append([
+        extract_numeric_id(work_id).encode("utf-8")
+        for work_id in work["referenced_works"]
+    ])
 
     return orjson.dumps(data)
 
 def decode_work_data(blob):
-    return orjson.loads(bytes(blob))
+    data = orjson.loads(bytes(blob))
+
+    return {
+        "publication_year": data[0],
+        "cited_by_count":   data[1],
+        "topics":           data[2],
+        "referenced_works": data[3]
+    }
