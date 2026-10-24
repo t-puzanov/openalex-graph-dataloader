@@ -42,7 +42,7 @@ def encode_work_data(work):
         for topic in work.get("topics", [])[:3]
     ])
     data.append([
-        extract_numeric_id(work_id).encode("utf-8")
+        extract_numeric_id(work_id)
         for work_id in work["referenced_works"]
     ])
 
